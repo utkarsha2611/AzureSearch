@@ -1,7 +1,3 @@
-/*-----------------------------------------------------------------------------
-Roller is a dice rolling skill that's been optimized for speech. 
------------------------------------------------------------------------------*/
-
 require('dotenv-extended').load();
 var restify = require('restify');
 var builder = require('botbuilder');
@@ -35,31 +31,25 @@ var bot = new builder.UniversalBot(connector, function (session) {
     //   session.replaceDialog('HelpDialog');
 
     var card = new builder.HeroCard(session)
-        .title('Welcome')
-        .buttons([
-            builder.CardAction.imBack(session, 'roll some dice', 'Roll Dice')
-        ]);
+        .title('Hey there! How can I help you today?')
+        .images('https://upload.wikimedia.org/wikipedia/en/thumb/5/5e/Celcom_logo.svg/1200px-Celcom_logo.svg.png');
+       // .buttons([
+    //        builder.CardAction.imBack(session, 'roll some dice', 'Roll Dice')
+       // ])
+  
     var msg = new builder.Message(session)
         .speak(speak(session, 'Hey there! How can I help you today?'))
-        //        .addAttachment(card)
+        .addAttachment(card)
         .inputHint(builder.InputHint.acceptingInput);
     session.send(msg);
 });
 var recognizer = new builder.LuisRecognizer(process.env.LUIS_MODEL_URL);
 bot.recognizer(recognizer);
 
-/**
- * This dialog sets up a custom game for the bot to play.  It will 
- * ask the user how many sides they want the dice to have and then
- * how many should be rolled. Once it's built up the game structure
- * it will pass it to a seperate 'PlayGameDialog'.
- */
-
 bot.dialog('nearest', function (session, args) {
     // Build up spoken response
-    var spoken = '';
-    msg.speak(ssml.speak(spoken));
-
+ //   var spoken = 'Which is the nearest center';
+   // msg.speak(ssml.speak('which is nearest center'));
     var msg = new builder.Message(session)
         .speak(speak(session, 'The nearest center for you will be Bangsar'))
         .inputHint(builder.InputHint.acceptingInput);
