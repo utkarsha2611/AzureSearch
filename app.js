@@ -56,6 +56,20 @@ bot.dialog('nearest', function (session, args) {
     session.send(msg).endDialog();
 }).triggerAction({ matches: 'nearest' });// /(roll|role|throw|shoot) again/i });
 
+
+bot.dialog('subscription', function (session, args) {
+    // Build up spoken response
+ //   var spoken = 'Which is the nearest center';
+   // msg.speak(ssml.speak('which is nearest center'));
+    var msg = new builder.Message(session)
+        .speak(speak(session, 'We will inform you via SMS when 1-Day Social Roam Pass has been successfully activated.'))
+        .inputHint(builder.InputHint.acceptingInput);
+    session.send(msg).endDialog();
+}).triggerAction({ matches: 'subscription' });// /(roll|role|throw|shoot) again/i });
+
+
+
+
 bot.dialog('HelpDialog', function (session) {
     var card = new builder.HeroCard(session)
         .title('Welcome')
