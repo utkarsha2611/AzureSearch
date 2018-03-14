@@ -32,7 +32,7 @@ server.post('/api/messages', connector.listen());
 var bot = new builder.UniversalBot(connector, function (session) {
  
     // Just redirect to our 'HelpDialog'.
-   // session.replaceDialog('nearest');
+    session.replaceDialog('HelpDialog');
 });
 var recognizer = new builder.LuisRecognizer(process.env.LUIS_MODEL_URL);
 bot.recognizer(recognizer);
@@ -91,14 +91,13 @@ bot.customAction({
  */
 bot.dialog('HelpDialog', function (session) {
     var card = new builder.HeroCard(session)
-        .title('help_title')
+        .title('Welcome')
         .buttons([
-            builder.CardAction.imBack(session, 'roll some dice', 'Roll Dice'),
-            builder.CardAction.imBack(session, 'play craps', 'Play Craps')
+            builder.CardAction.imBack(session, 'roll some dice', 'Roll Dice')
         ]);
     var msg = new builder.Message(session)
-        .speak(speak(session, 'help_ssml'))
-        .addAttachment(card)
+        .speak(speak(session, 'Hey there! How can I help you today?'))
+//        .addAttachment(card)
         .inputHint(builder.InputHint.acceptingInput);
     session.send(msg).endDialog();
 }).triggerAction({ matches: /help/i });
