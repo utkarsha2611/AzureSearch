@@ -10,9 +10,9 @@ var ssml = require('./ssml');
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
-   console.log('%s listening to %s', server.name, server.url); 
+    console.log('%s listening to %s', server.name, server.url);
 });
-  
+
 // Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
     appId: process.env.MICROSOFT_APP_ID,
@@ -49,9 +49,9 @@ bot.dialog('CreateGameDialog', [
         // Initialize game structure.
         // - dialogData gives us temporary storage of this data in between
         //   turns with the user.
-        var game = session.dialogData.game = { 
-            type: 'custom', 
-            sides: null, 
+        var game = session.dialogData.game = {
+            type: 'custom',
+            sides: null,
             count: null,
             turns: 0
         };
@@ -75,8 +75,8 @@ bot.dialog('CreateGameDialog', [
             { value: '12', action: { title: '12 Sides' }, synonyms: 'twelve|12 sided|12 sides' },
             { value: '20', action: { title: '20 Sides' }, synonyms: 'twenty|20 sided|20 sides' }
         ];
-        builder.Prompts.choice(session, 'choose_sides', choices, { 
-            speak: speak(session, 'choose_sides_ssml') 
+        builder.Prompts.choice(session, 'choose_sides', choices, {
+            speak: speak(session, 'choose_sides_ssml')
         });
     },
     function (session, results) {
@@ -116,10 +116,12 @@ bot.dialog('CreateGameDialog', [
          */
         session.replaceDialog('PlayGameDialog', { game: game });
     }
-]).triggerAction({ matches: [
-    /(roll|role|throw|shoot).*(dice|die|dye|bones)/i,
-    /new game/i
- ]});
+]).triggerAction({
+    matches: [
+        /(roll|role|throw|shoot).*(dice|die|dye|bones)/i,
+        /new game/i
+    ]
+});
 
 /**
  * This dialog is our main game loop. We'll store the game structure in
@@ -172,7 +174,7 @@ bot.dialog('PlayGameDialog', function (session, args) {
         var reaction = 'normal';
         var min = game.count;
         var max = game.count * game.sides;
-        var score = total/max;
+        var score = total / max;
         if (score === 1.0) {
             reaction = 'best';
         } else if (score === 0) {
@@ -182,7 +184,7 @@ bot.dialog('PlayGameDialog', function (session, args) {
         } else if (score >= 0.8) {
             reaction = 'good';
         }
-        
+
         // Check for special craps rolls
         if (game.type === 'craps') {
             switch (total) {
@@ -207,7 +209,7 @@ bot.dialog('PlayGameDialog', function (session, args) {
         var spoken = '';
         if (game.turn === 0) {
             spoken += session.gettext('start_' + game.type + '_game_ssml') + ' ';
-        } 
+        }
         spoken += session.gettext(reaction + '_roll_reaction_ssml');
         msg.speak(ssml.speak(spoken));
 
@@ -231,9 +233,9 @@ bot.dialog('HelpDialog', function (session) {
     var card = new builder.HeroCard(session)
         .title('Hey there! How can I help you today?');
     //    .buttons([
-        //    builder.CardAction.imBack(session, 'roll some dice', 'Roll Dice'),
-        //  builder.CardAction.imBack(session, 'play craps', 'Play Craps')
-      //  ]);
+    //    builder.CardAction.imBack(session, 'roll some dice', 'Roll Dice'),
+    //  builder.CardAction.imBack(session, 'play craps', 'Play Craps')
+    //  ]);
     var msg = new builder.Message(session)
         .speak(speak(session, 'Hey there! How can I help you today?'))
         .addAttachment(card)
@@ -242,13 +244,13 @@ bot.dialog('HelpDialog', function (session) {
 }).triggerAction({ matches: /help/i });
 
 
-bot.dialog('nearest',function(session){
-var msg = new builder.Message(session)
+bot.dialog('nearest', function (session) {
+    var msg = new builder.Message(session)
         .speak(speak(session, 'The nearest center is Bangsar'))
-        .addAttachment(card)
+       // .addAttachment(card)
         .inputHint(builder.InputHint.acceptingInput);
     session.send(msg).endDialog();
-}).triggerAction({matches :'nearest'});
+}).triggerAction({ matches: 'nearest' });
 /** Helper function to wrap SSML stored in the prompts file with <speak/> tag. */
 function speak(session, prompt) {
     var localized = session.gettext(prompt);
