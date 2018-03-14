@@ -31,18 +31,10 @@ var bot = new builder.UniversalBot(connector, function (session) {
     // Just redirect to our 'HelpDialog'.
     session.replaceDialog('HelpDialog');
 });
+var recognizer = new builder.LuisRecognizer(process.env.LUIS_MODEL_URL);
+bot.recognizer(recognizer);
 
-/**
- * This dialog sets up a custom game for the bot to play.  It will 
- * ask the user how many sides they want the dice to have and then
- * how many should be rolled. Once it's built up the game structure
- * it will pass it to a seperate 'PlayGameDialog'.
- * 
- * We've added a triggerAction() to this dialog that lets a user say
- * something like "I'd like to roll some dice" to start the dialog.
- * We're using a RegEx to match the users input but we could just as 
- * easily use a LUIS intent.
- */
+
 bot.dialog('CreateGameDialog', [
     function (session) {
         // Initialize game structure.
@@ -119,6 +111,35 @@ bot.dialog('CreateGameDialog', [
     /(roll|role|throw|shoot).*(dice|die|dye|bones)/i,
     /ew game/i
  ]});
+
+
+
+
+bot.dialog('nearest', function (session, args) {
+    // Get current or new game structure.
+
+        var card = new builder.HeroCard(session)
+            .subtitle('hi')
+            .buttons([
+                builder.CardAction.imBack(session, 'roll again', 'Roll Again')
+            ]);
+     
+            card.text('hi');
+        
+        var msg = new builder.Message(session).addAttachment(card);
+        // Build up spoken response
+        var spoken = 'Nearest center is Bangsar';
+      //  spoken += session.gettext(reaction + '_roll_reaction_ssml');
+        msg.speak(ssml.speak(spoken));
+
+        /**
+         * Send card and bots reaction to user. 
+         */
+        msg.inputHint(builder.InputHint.acceptingInput);
+        session.send(msg).endDialog();
+    
+}).triggerAction({ matches: 'nearest' });
+
 
 /**
  * This dialog is our main game loop. We'll store the game structure in
