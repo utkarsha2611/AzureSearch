@@ -226,44 +226,28 @@ bot.dialog('PlayGameDialog', function (session, args) {
     }
 }).triggerAction({ matches: /(roll|role|throw|shoot) again/i });
 
-/**
- * Listen for the user to ask to play craps.
- * 
- * While you can use a triggerAction() to start a dialog, you sometimes just want
- * to either send a message when a user says something or start an existing dialog
- * with some arguments. You can use a cusomAction() to recognize something the user
- * says without tampering with the dialog stack. In our case what we want to do is
- * call 'PlayGameDialog' with a pre-defined game structure. 
- */
-bot.customAction({
-    matches: /(play|start).*(craps)/i,
-    onSelectAction: function (session, args, next) {
-        // The user could be in another dialog so clear the dialog stack first
-        // to make sure we end that task.
-        session.clearDialogStack().beginDialog('PlayGameDialog', {
-            game: { type: 'craps', sides: 6, count: 2, turn: 0 }
-        });
-    }
-});
-
-/**
- * Every bot should have a help dialog. Ours will use a card with some buttons
- * to educate the user with the options available to them.
- */
 bot.dialog('HelpDialog', function (session) {
     var card = new builder.HeroCard(session)
-        .title('help_title')
-        .buttons([
-            builder.CardAction.imBack(session, 'roll some dice', 'Roll Dice'),
-            builder.CardAction.imBack(session, 'play craps', 'Play Craps')
-        ]);
+        .title('Hey there! How can I help you today?');
+    //    .buttons([
+        //    builder.CardAction.imBack(session, 'roll some dice', 'Roll Dice'),
+        //  builder.CardAction.imBack(session, 'play craps', 'Play Craps')
+      //  ]);
     var msg = new builder.Message(session)
-        .speak(speak(session, 'help_ssml'))
+        .speak(speak(session, 'Hey there! How can I help you today?'))
         .addAttachment(card)
         .inputHint(builder.InputHint.acceptingInput);
     session.send(msg).endDialog();
 }).triggerAction({ matches: /help/i });
 
+
+bot.dialog('nearest',function(session){
+var msg = new builder.Message(session)
+        .speak(speak(session, 'The nearest center is Bangsar'))
+        .addAttachment(card)
+        .inputHint(builder.InputHint.acceptingInput);
+    session.send(msg).endDialog();
+}).triggerAction({matches :'nearest'});
 /** Helper function to wrap SSML stored in the prompts file with <speak/> tag. */
 function speak(session, prompt) {
     var localized = session.gettext(prompt);
