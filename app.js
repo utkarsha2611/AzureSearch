@@ -65,9 +65,8 @@ bot.dialog('/', function (session) {
         .speak(speak(session, 'Hey there! How can I help you today?'))
 //        .addAttachment(card)
         .inputHint(builder.InputHint.acceptingInput);
-    session.send(msg).endDialog();
-  
-}).triggerAction({ matches: /help/i });
+    session.send(msg);//.endDialog();
+});//.triggerAction({ matches: /help/i });
 
 /** Helper function to wrap SSML stored in the prompts file with <speak/> tag. */
 function speak(session, prompt) {
