@@ -31,7 +31,8 @@ var bot = new builder.UniversalBot(connector, function (session) {
     // Just redirect to our 'HelpDialog'.
     session.replaceDialog('HelpDialog');
 });
-
+var recognizer = new builder.LuisRecognizer(process.env.LUIS_MODEL_URL);
+bot.recognizer(recognizer);
 /**
  * This dialog sets up a custom game for the bot to play.  It will 
  * ask the user how many sides they want the dice to have and then
