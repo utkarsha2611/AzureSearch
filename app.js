@@ -32,7 +32,7 @@ server.post('/api/messages', connector.listen());
 var bot = new builder.UniversalBot(connector, function (session) {
  
     // Just redirect to our 'HelpDialog'.
-    session.replaceDialog('HelpDialog');
+ //   session.replaceDialog('HelpDialog');
 });
 var recognizer = new builder.LuisRecognizer(process.env.LUIS_MODEL_URL);
 bot.recognizer(recognizer);
@@ -55,7 +55,7 @@ bot.dialog('nearest', function (session, args) {
          session.send(msg).endDialog();
 }).triggerAction({ matches: 'nearest' });// /(roll|role|throw|shoot) again/i });
 
-bot.dialog('HelpDialog', function (session) {
+bot.dialog('/', function (session) {
     var card = new builder.HeroCard(session)
         .title('Welcome')
         .buttons([
@@ -66,7 +66,7 @@ bot.dialog('HelpDialog', function (session) {
 //        .addAttachment(card)
         .inputHint(builder.InputHint.acceptingInput);
     session.send(msg).endDialog();
-   session.beginDialog('nearest');
+  
 }).triggerAction({ matches: /help/i });
 
 /** Helper function to wrap SSML stored in the prompts file with <speak/> tag. */
