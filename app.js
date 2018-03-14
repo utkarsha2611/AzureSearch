@@ -31,7 +31,7 @@ var bot = new builder.UniversalBot(connector, function (session) {
     // Just redirect to our 'HelpDialog'.
     session.replaceDialog('HelpDialog');
 });
-var recognizer = new builder.LuisRecognizer(process.env.LUIS_MODEL_URL);
+var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/b2cd285d-a0d5-4060-82b7-01d048ac2130?subscription-key=7c029b229e924655a57eb8afe6dc990a&verbose=true&timezoneOffset=0&q=');
 bot.recognizer(recognizer);
 
 
